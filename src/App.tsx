@@ -11,7 +11,7 @@ const App = () => {
 	const dispatch = useAppDispatch();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const onDragEnd = ({result}: any) => {
+	const onDragEnd = (result: any) => {
 		const { destination, source, draggableId } = result;
 		if (!destination) return;
 
