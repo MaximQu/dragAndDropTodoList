@@ -3,24 +3,30 @@ import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid/non-secure";
 import { TodoList, TodoLists } from "../types";
 
+const storedData = localStorage.getItem("todos");
+const items =
+	storedData !== null
+		? JSON.parse(storedData)
+		: [
+				{
+					id: nanoid(),
+					title: "Todo",
+					items: [{ id: nanoid(), body: "Buy a new car" }],
+				},
+				{
+					id: nanoid(),
+					title: "In Progress",
+					items: [{ id: nanoid(), body: "Clean a car" }],
+				},
+				{
+					id: nanoid(),
+					title: "Done",
+					items: [{ id: nanoid(), body: "Sold a car" }],
+				},
+		];
+
 const initialState: TodoLists = {
-	todoLists: [
-		{
-			id: nanoid(),
-			title: "Todo",
-			items: [{ id: nanoid(), body: "Buy a new car" }],
-		},
-		{
-			id: nanoid(),
-			title: "In Progress",
-			items: [{ id: nanoid(), body: "Clean a car" }],
-		},
-		{
-			id: nanoid(),
-			title: "Done",
-			items: [{ id: nanoid(), body: "Sold a car" }],
-		},
-	],
+	todoLists: items,
 };
 
 export const todoSlice = createSlice({
@@ -40,6 +46,7 @@ export const todoSlice = createSlice({
 				}
 				return item;
 			});
+			localStorage.setItem("todos", JSON.stringify(state.todoLists));
 		},
 		removeTodo: (
 			state,
@@ -57,9 +64,11 @@ export const todoSlice = createSlice({
 				}
 				return listItem;
 			});
+			localStorage.setItem("todos", JSON.stringify(state.todoLists));
 		},
 		updateList: (state, action: PayloadAction<TodoList[]>) => {
 			state.todoLists = action.payload;
+			localStorage.setItem("todos", JSON.stringify(state.todoLists));
 		},
 		editTodoItem: (
 			state,
@@ -76,7 +85,7 @@ export const todoSlice = createSlice({
 						items: listItem.items.map((item) => {
 							if (item.id === action.payload.itemId) {
 								return {
-                                    ...item,
+									...item,
 									body: action.payload.text,
 								};
 							}
@@ -87,6 +96,7 @@ export const todoSlice = createSlice({
 				}
 				return listItem;
 			});
+			localStorage.setItem("todos", JSON.stringify(state.todoLists));
 		},
 	},
 });
