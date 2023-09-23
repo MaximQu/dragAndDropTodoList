@@ -1,0 +1,96 @@
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { nanoid } from "nanoid/non-secure";
+import { TodoList, TodoLists } from "../types";
+
+const initialState: TodoLists = {
+	todoLists: [
+		{
+			id: nanoid(),
+			title: "Todo",
+			items: [{ id: nanoid(), body: "Buy a new car" }],
+		},
+		{
+			id: nanoid(),
+			title: "In Progress",
+			items: [{ id: nanoid(), body: "Clean a car" }],
+		},
+		{
+			id: nanoid(),
+			title: "Done",
+			items: [{ id: nanoid(), body: "Sold a car" }],
+		},
+	],
+};
+
+export const todoSlice = createSlice({
+	name: "todo",
+	initialState,
+	reducers: {
+		addTodo: (state, action: PayloadAction<string>) => {
+			state.todoLists = state.todoLists.map((item) => {
+				if (item.title === "Todo") {
+					return {
+						...item,
+						items: [
+							{ id: nanoid(), body: action.payload },
+							...item.items,
+						],
+					};
+				}
+				return item;
+			});
+		},
+		removeTodo: (
+			state,
+			action: PayloadAction<{ listId: string; itemId: string }>,
+		) => {
+			state.todoLists = state.todoLists.map((listItem) => {
+				if (listItem.id === action.payload.listId) {
+					const newList = {
+						...listItem,
+						items: listItem.items.filter(
+							(item) => item.id !== action.payload.itemId,
+						),
+					};
+					return newList;
+				}
+				return listItem;
+			});
+		},
+		updateList: (state, action: PayloadAction<TodoList[]>) => {
+			state.todoLists = action.payload;
+		},
+		editTodoItem: (
+			state,
+			action: PayloadAction<{
+				listId: string;
+				itemId: string;
+				text: string;
+			}>,
+		) => {
+			state.todoLists = state.todoLists.map((listItem) => {
+				if (listItem.id === action.payload.listId) {
+					const newList = {
+						...listItem,
+						items: listItem.items.map((item) => {
+							if (item.id === action.payload.itemId) {
+								return {
+                                    ...item,
+									body: action.payload.text,
+								};
+							}
+							return item;
+						}),
+					};
+					return newList;
+				}
+				return listItem;
+			});
+		},
+	},
+});
+
+export const { addTodo, updateList, removeTodo, editTodoItem } =
+	todoSlice.actions;
+export default todoSlice.reducer;
