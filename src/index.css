@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+	width: 0.8em;
+	margin-left: 5px;
+}
+
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgb(146, 155, 78);
+}
+
+@layer components {
+	.bg-gradient {
+		background-image: linear-gradient(
+			45deg,
+			hsl(321deg 43% 64%) 0%,
+			hsl(350deg 40% 69%) 10%,
+			hsl(23deg 49% 69%) 20%,
+			hsl(40deg 61% 65%) 30%,
+			hsl(49deg 72% 60%) 40%,
+			hsl(55deg 84% 49%) 50%,
+			hsl(62deg 64% 62%) 60%,
+			hsl(77deg 61% 71%) 70%,
+			hsl(104deg 59% 78%) 80%,
+			hsl(142deg 68% 79%) 90%,
+			hsl(163deg 81% 75%) 100%
+		);
+		background-size: 100% 300%;
+		animation: bgRotation 20s infinite forwards;
+	}
+	.todoList {
+		@apply flex max-h-[70vh] min-h-[50px] flex-col gap-2 overflow-x-hidden;
+	}
+	.todoItem {
+		@apply flex cursor-grab items-center justify-between gap-3 bg-white/40 p-2 text-lg backdrop-blur;
+	}
+}
+
+@keyframes bgRotation {
+	0% {
+		background-position: 0% 50%;
+	}
+	25% {
+		background-position: 50% 0%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	75% {
+		background-position: 50% 100%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
